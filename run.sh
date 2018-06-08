@@ -42,7 +42,7 @@ postconf -P "submission/inet/smtpd_sasl_auth_enable=yes"
 postconf -P "submission/inet/milter_macro_daemon_name=ORIGINATING"
 postconf -P "submission/inet/smtpd_client_restrictions=permit_sasl_authenticated,reject"
 postconf -P "submission/inet/smtpd_recipient_restrictions=permit_mynetworks,permit_sasl_authenticated,reject"
-
+postconf -e "smtp_use_tls=yes"
 # Set up host name
 if [ ! -z "$HOSTNAME" ]; then
 	postconf -e myhostname="$HOSTNAME"
