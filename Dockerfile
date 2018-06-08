@@ -1,5 +1,4 @@
 FROM alpine:edge
-MAINTAINER Bojan Cekrlic - https://github.com/bokysan/docker-postfix/
 
 # See README.md for details
 
