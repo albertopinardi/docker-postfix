@@ -16,7 +16,7 @@ application's outgoing queue, read on.
 
 To run the container, do the following:
 ```
-docker run --rm --name postfix -p 1587:587 boky/postfix
+docker run --rm --name postfix -p 1587:587 postfix
 ```
 
 You can now send emails by using `localhost:1587` as your SMTP server address. **Please note that
@@ -45,7 +45,7 @@ the default Docker host name will be used. A lot of times, this will be just the
 which may make it difficult to track your emails in the log files. If you care about tracking at all,
 I suggest you set this variable, e.g.:
 ```
-docker run --rm --name postfix -e HOSTNAME=postfix-docker -p 1587:587 boky/postfix
+docker run --rm --name postfix -e HOSTNAME=postfix-docker -p 1587:587  /postfix
 ```
 
 ### `RELAYHOST`, `RELAYHOST_USERNAME` and `RELAYHOST_PASSWORD`
@@ -56,22 +56,22 @@ you will most likely have a dedicated outgoing mail server. By setting this opti
 
 Example:
 ```
-docker run --rm --name postfix -e RELAYHOST=192.168.115.215 -p 1587:587 boky/postfix
+docker run --rm --name postfix -e RELAYHOST=192.168.115.215 -p 1587:587  /postfix
 ```
 
 You may optionally specifiy a rely port, e.g.:
 ```
-docker run --rm --name postfix -e RELAYHOST=192.168.115.215:587 -p 1587:587 boky/postfix
+docker run --rm --name postfix -e RELAYHOST=192.168.115.215:587 -p 1587:587  /postfix
 ```
 
 Or an IPv6 address, e.g.:
 ```
-docker run --rm --name postfix -e 'RELAYHOST=[2001:db8::1]:587' -p 1587:587 boky/postfix
+docker run --rm --name postfix -e 'RELAYHOST=[2001:db8::1]:587' -p 1587:587  /postfix
 ```
 
 If your end server requires you to authenticate with username/password, add them also:
 ```
-docker run --rm --name postfix -e RELAYHOST=mail.google.com -e RELAYHOST_USERNAME=hello@gmail.com -e RELAYHOST_PASSWORD=world -p 1587:587 boky/postfix
+docker run --rm --name postfix -e RELAYHOST=mail.google.com -e RELAYHOST_USERNAME=hello@gmail.com -e RELAYHOST_PASSWORD=world -p 1587:587  /postfix
 ```
 
 ### `MYNETWORKS`
@@ -85,7 +85,7 @@ override this setting.
 
 Example:
 ```
-docker run --rm --name postfix -e "MYNETWORKS=10.1.2.0/24" -p 1587:587 boky/postfix
+docker run --rm --name postfix -e "MYNETWORKS=10.1.2.0/24" -p 1587:587  /postfix
 ```
 
 ### `ALLOWED_SENDER_DOMAINS`
@@ -95,20 +95,5 @@ POSTFIX further down and accept email from these domains only.
 
 Example:
 ```
-docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.org" -p 1587:587 boky/postfix
+docker run --rm --name postfix -e "ALLOWED_SENDER_DOMAINS=example.com example.org" -p 1587:587  /postfix
 ```
-
-## Extending the image
-
-If you need to add custom configuration to postfix or have it do something outside of the scope of this configuration, simply
-add your scripts to `/docker-init.db/`. All files with the `.sh` extension will be executed automatically at the end of the
-startup script.
-
-E.g.: create a custom `Dockerfile` like this:
-```
-FROM boky/postfix
-MAINTAINER Some Randombloke "randombloke@example.com"
-ADD Dockerfiles/additiona-config.sh /docker-init.db/
-```
-
-Build it with docker and your script will be automatically executed before Postfix starts.
